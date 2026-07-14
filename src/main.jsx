@@ -1,51 +1,539 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Blocks, Bot, Check, ChevronDown, CircleDollarSign, Cpu, DatabaseZap, Globe2, Hexagon, Layers3, LockKeyhole, Menu, Network, Rocket, ShieldCheck, Sparkles, TrendingUp, WalletCards, X } from 'lucide-react';
-import BorderGlow from './BorderGlow.jsx';
-import LogoLoop from './LogoLoop.jsx';
+import {
+  ArrowRight,
+  Blocks,
+  Bot,
+  Check,
+  ChevronDown,
+  CircleDollarSign,
+  DatabaseZap,
+  Globe2,
+  Hexagon,
+  Layers3,
+  LockKeyhole,
+  Menu,
+  Network,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+  WalletCards,
+  X
+} from 'lucide-react';
+import BorderGlow from './BorderGlow';
+import LineWaves from './LineWaves';
+import LogoLoop from './LogoLoop';
+import TextType from './TextType';
 import './styles.css';
 
-const Spline = lazy(() => import('@splinetool/react-spline'));
 const navItems = ['Network', 'Products', 'Ecosystem', 'Roadmap', 'FAQ'];
-const metrics = [['2.8M+', '链上身份连接'], ['$940M', '生态资产流转'], ['146', '集成协议'], ['99.98%', '节点可用性']];
+
+const metrics = [
+  ['2.8M+', '链上身份连接'],
+  ['$940M', '生态资产流转'],
+  ['146', '集成协议'],
+  ['99.98%', '节点可用性']
+];
+
 const products = [
-  { title: 'Growth Graph', text: '把任务、凭证、社群和链上行为合并成增长图谱，让用户贡献可以被验证、追踪和激励。' },
-  { title: 'Asset Launchpad', text: '支持积分、NFT、代币凭证和会员权益的一站式发行，内置风控、白名单和结算策略。' },
-  { title: 'AI Agent Layer', text: '用自动化代理完成数据监测、用户分层、任务触发和跨协议运营，减少人工重复操作。' },
+  {
+    icon: <Network />,
+    title: 'Growth Graph',
+    text: '把任务、凭证、社群和链上行为合并成增长图谱，让用户贡献可以被验证、追踪和激励。'
+  },
+  {
+    icon: <WalletCards />,
+    title: 'Asset Launchpad',
+    text: '支持积分、NFT、代币凭证和会员权益的一站式发行，内置风控、白名单和结算策略。'
+  },
+  {
+    icon: <Bot />,
+    title: 'AI Agent Layer',
+    text: '用自动化代理完成数据监测、用户分层、任务触发和跨协议运营，减少人工重复操作。'
+  }
 ];
+
 const whyCards = [
-  ['安全可靠的增长网络', '身份、任务和资产流转都经过链上验证，让团队在增长、激励和发行环节保持可追踪、可审计。', 'secure'],
-  ['一站式运营服务', '从任务配置、用户分层、活动数据到资产发行，统一在同一个控制台内完成，减少跨工具协作成本。', 'service'],
-  ['生态合作伙伴', '面向交易平台、协议、社区和 AI Agent 生态开放接口，让增长策略可以持续复用和组合。', 'partner'],
+  {
+    title: '安全可靠的增长网络',
+    text: '身份、任务和资产流转都经过链上验证，让团队在增长、激励和发行环节保持可追踪、可审计。',
+    variant: 'secure'
+  },
+  {
+    title: '一站式运营服务',
+    text: '从任务配置、用户分层、活动数据到资产发行，统一在同一个控制台内完成，减少跨工具协作成本。',
+    variant: 'service'
+  },
+  {
+    title: '生态合作伙伴',
+    text: '面向交易平台、协议、社区和 AI Agent 生态开放接口，让增长策略可以持续复用和组合。',
+    variant: 'partner'
+  }
 ];
+
 const futuresRows = [
-  ['BTC', 'BTCUSDT', '89,967.50', '-2.17%', '18.4309亿', 'bitcoin'], ['ETH', 'ETHUSDT', '3,097.36', '-3.57%', '23.2643亿', 'ethereum'], ['SOL', 'SOLUSDT', '134.01', '-2.70%', '6.419亿', 'solana'], ['XT', 'XTUSDT', '5.1630', '-2.79%', '8,956.58万', 'xt'], ['DOGE', 'DOGEUSDT', '0.13961', '-5.72%', '1.5194亿', 'doge'], ['ARB', 'ARBUSDT', '1.3402', '+5.70%', '9,328.12万', 'arb'], ['OP', 'OPUSDT', '2.0810', '+4.20%', '7,894.44万', 'op']
+  ['BTC', 'BTCUSDT', '89,967.50', '-2.17%', '18.4309亿', 'bitcoin'],
+  ['ETH', 'ETHUSDT', '3,097.36', '-3.57%', '23.2643亿', 'ethereum'],
+  ['SOL', 'SOLUSDT', '134.01', '-2.70%', '6.419亿', 'solana'],
+  ['XT', 'XTUSDT', '5.1630', '-2.79%', '8,956.58万', 'xt'],
+  ['DOGE', 'DOGEUSDT', '0.13961', '-5.72%', '1.5194亿', 'doge'],
+  ['ARB', 'ARBUSDT', '1.3402', '+5.70%', '9,328.12万', 'arb'],
+  ['OP', 'OPUSDT', '2.0810', '+4.20%', '7,894.44万', 'op']
 ];
+
 const newCoinRows = [
-  ['DN', 'DN', '00:21:14:59', '--', '', 'dn'], ['BYTE', 'BYTE', '0.03810', '+281.00%', '', 'byte'], ['HBAR3L', 'HBAR3L', '0.942073', '-5.79%', '3X', 'hbar'], ['HBAR3S', 'HBAR3S', '1.043104', '+4.31%', '3X', 'hbar'], ['PAXG3S', 'PAXG3S', '0.998415', '-0.15%', '3X', 'paxg'], ['MANTA', 'MANTA', '1.22492', '+18.42%', '', 'manta'], ['ZK', 'ZK', '0.24516', '+9.88%', '', 'zk']
+  ['DN', 'DN', '00:21:14:59', '--', '', 'dn'],
+  ['BYTE', 'BYTE', '0.03810', '+281.00%', '', 'byte'],
+  ['HBAR3L', 'HBAR3L', '0.942073', '-5.79%', '3X', 'hbar'],
+  ['HBAR3S', 'HBAR3S', '1.043104', '+4.31%', '3X', 'hbar'],
+  ['PAXG3S', 'PAXG3S', '0.998415', '-0.15%', '3X', 'paxg'],
+  ['MANTA', 'MANTA', '1.22492', '+18.42%', '', 'manta'],
+  ['ZK', 'ZK', '0.24516', '+9.88%', '', 'zk']
 ];
-const roadmap = [['Q3', 'Genesis Network', '开放身份图谱、任务引擎和开发者 API。'], ['Q4', 'Liquidity OS', '上线资产发行、流动性激励和跨链结算面板。'], ['Q1', 'Agent Mesh', '引入链上 AI Agent 编排与自治增长策略。']];
-const faqs = [['NOVA3 适合哪些项目？', '适合 Web3 协议、交易平台、链游、DePIN、NFT 社区和任何需要链上增长、资产发行、用户激励的团队。'], ['是否支持多链？', '官网展示为产品概念模板，页面结构已预留多链、生态伙伴和开发者文档入口，后续可接入真实协议数据。'], ['可以改成我的品牌吗？', '可以。品牌名、配色、文案、模块顺序和上线域名都能继续替换。']];
+
+const roadmap = [
+  ['Q3', 'Genesis Network', '开放身份图谱、任务引擎和开发者 API。'],
+  ['Q4', 'Liquidity OS', '上线资产发行、流动性激励和跨链结算面板。'],
+  ['Q1', 'Agent Mesh', '引入链上 AI Agent 编排与自治增长策略。']
+];
+
+const faqs = [
+  ['NOVA3 适合哪类项目？', '适合 Web3 协议、交易平台、链游、DePIN、NFT 社区和任何需要链上增长、资产发行、用户激励的团队。'],
+  ['是否支持多链？', '官网展示为产品概念模板，页面结构已预留多链、生态伙伴和开发者文档入口，后续可接入真实协议数据。'],
+  ['可以改成我的品牌吗？', '可以。品牌名、配色、文案、模块顺序和上线域名都能继续替换。']
+];
 
 function Header() {
   const [open, setOpen] = useState(false);
-  return <header className="site-header"><a className="brand" href="#top"><span className="brand-mark"><Hexagon size={18} /></span><span>NOVA3</span></a><nav className={open ? 'nav open' : 'nav'}>{navItems.map((item) => <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setOpen(false)}>{item}</a>)}</nav><div className="header-actions"><a className="ghost-link" href="#ecosystem">Docs</a><a className="primary-button small" href="#contact">Launch App <ArrowRight size={16} /></a><button className="icon-button menu-button" aria-label="切换导航" onClick={() => setOpen((v) => !v)}>{open ? <X size={20} /> : <Menu size={20} />}</button></div></header>;
+  return (
+    <header className="site-header">
+      <a className="brand" href="#top" aria-label="NOVA3 home">
+        <span className="brand-mark">
+          <Hexagon size={18} />
+        </span>
+        <span>NOVA3</span>
+      </a>
+      <nav className={open ? 'nav open' : 'nav'} aria-label="主导航">
+        {navItems.map((item) => (
+          <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setOpen(false)}>
+            {item}
+          </a>
+        ))}
+      </nav>
+      <div className="header-actions">
+        <a className="ghost-link" href="#ecosystem">Docs</a>
+        <a className="primary-button small" href="#contact">
+          Launch App
+          <ArrowRight size={16} />
+        </a>
+        <button className="icon-button menu-button" aria-label="切换导航" onClick={() => setOpen((v) => !v)}>
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+    </header>
+  );
 }
-function HeroBackground() { return <div className="hero-spline" aria-hidden="true"><Suspense fallback={<div className="spline-fallback" />}><Spline scene="https://prod.spline.design/Slk6b8kz3LRlKiyk/scene.splinecode" /></Suspense></div>; }
-function Hero() { return <section className="hero" id="top"><HeroBackground /><div className="hero-copy"><div className="eyebrow"><Sparkles size={16} /> Web3 Growth & Asset Network</div><h1>Build Web3 growth, asset launches, and community incentives in one network.</h1><p>NOVA3 为 Web3 团队提供身份图谱、任务增长、资产发行与 AI Agent 自动化层。黑盒运营变成可验证的数据流，社区贡献变成可组合的链上资产。</p><div className="hero-actions"><BorderGlow className="button-glow primary-action-glow" borderRadius={999} glowRadius={26} glowIntensity={1.25} coneSpread={32} colors={['#9cff4f', '#28ffc8', '#56d7ff']} fillOpacity={0.22}><a className="primary-button" href="#contact">Start building <Rocket size={18} /></a></BorderGlow><BorderGlow className="button-glow secondary-action-glow" borderRadius={999} glowRadius={24} glowColor="262 100 72" coneSpread={32} colors={['#7c3cff', '#28ffc8', '#ff4fd8']} fillOpacity={0.2}><a className="secondary-button" href="#network">Explore network <ArrowRight size={18} /></a></BorderGlow></div></div></section>; }
-function MarketSection() { return <section className="market-section" id="network"><HeroVisual /><Metrics className="market-metrics" /></section>; }
-function HeroVisual() { return <div className="hero-visual" aria-label="链上行情榜单"><BorderGlow className="market-board hero-terminal-card" edgeSensitivity={24} glowColor="164 100 64" backgroundColor="#0b0f10" borderRadius={22} glowRadius={34} glowIntensity={1.1} coneSpread={28} animated colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.34}><div className="market-panels"><div className="market-table market-table-wide"><div className="market-tabs"><strong>热门合约榜</strong><span>热门榜</span></div><div className="market-head"><span>币种</span><span>价格</span><span>24H涨跌幅</span><span>24H 成交量</span><span>操作</span></div><div className="market-scroll">{[...futuresRows, ...futuresRows].map(([ticker, pair, price, change, volume, icon], index) => <div className="market-line" key={`${pair}-${index}`}><span className={`coin-badge coin-${icon}`}>{ticker.slice(0, 1)}</span><strong>{pair}</strong><span>{price}</span><em className={change.startsWith('+') ? 'positive' : 'negative'}>{change}</em><span>{volume}</span><button>交易</button></div>)}</div></div><div className="market-table"><div className="market-tabs"><strong>新币榜</strong><span>涨幅榜</span><span>跌幅榜</span></div><div className="market-head compact"><span>币种</span><span>价格</span><span>24H涨跌幅</span></div><div className="market-scroll">{[...newCoinRows, ...newCoinRows].map(([ticker, pair, price, change, leverage, icon], index) => <div className="market-line compact" key={`${pair}-${index}`}><span className={`coin-badge coin-${icon}`}>{ticker.slice(0, 1)}</span><strong>{pair}</strong>{leverage && <small>{leverage}</small>}<span>{price}</span><em className={change.startsWith('+') ? 'positive' : 'negative'}>{change}</em></div>)}</div></div></div></BorderGlow></div>; }
-function Metrics({ className = '' }) { return <section className={`metrics-strip ${className}`} aria-label="关键数据">{metrics.map(([value, label]) => <BorderGlow className="metric" key={label} borderRadius={22} glowRadius={24} edgeSensitivity={34} glowIntensity={0.8} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.18}><strong>{value}</strong><span>{label}</span></BorderGlow>)}</section>; }
-function ProductIcon({ variant }) { const labels = [{ main: '%', note: 'TASK', className: 'growth' }, { main: '$', note: '125', className: 'asset' }, { main: '↗', note: 'AI', className: 'agent' }]; const item = labels[variant] ?? labels[0]; return <div className={`product-visual product-visual-${item.className}`} aria-hidden="true"><div className="visual-stage"><span className="xt-mark">XT</span></div><div className="visual-orb visual-orb-main">{item.main}</div><div className="visual-orb visual-orb-note">{item.note}</div></div>; }
-function Products() { return <section className="section" id="products"><div className="section-heading"><span className="section-kicker">Products</span><h2>一个面向增长、资产和自动化的 Web3 控制台。</h2><p>参考交易平台的高信任信息密度，也保留未来感官网需要的情绪张力。</p></div><div className="product-grid">{products.map((item, index) => <BorderGlow className="feature-card" key={item.title} borderRadius={22} glowRadius={34} glowIntensity={1.05} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.32}><ProductIcon variant={index} /><h3>{item.title}</h3><p>{item.text}</p></BorderGlow>)}</div></section>; }
-function WhyIcon({ variant }) { return <div className={`why-icon why-icon-${variant}`} aria-hidden="true"><span className="why-pop why-pop-back" /><span className="why-doc"><span /><span /></span><span className="why-symbol" /><span className="why-glow" /></div>; }
-function WhyChoose() { return <section className="why-section"><div className="section-heading left"><span className="section-kicker">Why NOVA3</span><h2>为什么选择我们</h2></div><div className="why-grid">{whyCards.map((item) => <BorderGlow className="why-card" key={item[0]} borderRadius={22} glowRadius={30} glowIntensity={0.95} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.18}><WhyIcon variant={item[2]} /><h3>{item[0]}</h3><p>{item[1]}</p></BorderGlow>)}</div></section>; }
-function Ecosystem() { return <section className="ecosystem" id="ecosystem"><div className="section-heading left"><span className="section-kicker">Ecosystem</span><h2>从第一次连接钱包，到长期留存，每一步都能被证明。</h2></div><div className="ecosystem-layout"><div className="stack-list">{[[ShieldCheck, 'Proof-of-Action', '验证任务完成、交易行为、社交扩散和开发者贡献。'], [DatabaseZap, 'Unified Data Layer', '聚合链上事件、CRM 标签、积分和活动数据。'], [LockKeyhole, 'Compliance Ready', '预留风控、权限、审计和黑名单策略。'], [Globe2, 'Community Portal', '将社区、活动、空投和生态任务统一到品牌入口。']].map(([Icon, title, text]) => <BorderGlow className="stack-item" key={title} borderRadius={18} glowRadius={28} edgeSensitivity={32} glowIntensity={0.92} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.22}><Icon size={22} /><div><h3>{title}</h3><p>{text}</p></div></BorderGlow>)}</div><div className="protocol-showcase" aria-label="NOVA3 资产戏剧化 3D 元素"><div className="vault-cube cube-left" /><div className="vault-cube cube-right" /><div className="vault-device"><div className="vault-top"><span className="vault-beam" /><span className="vault-coin">₿</span></div><div className="vault-face"><span className="vault-port" /><span className="vault-screen" /><span className="vault-light" /></div><div className="vault-base" /></div><div className="vault-card card-left" /><div className="vault-card card-right"><TrendingUp size={22} /></div></div></div></section>; }
-function TrustBand() { return <section className="trust-band">{[[Layers3, 'Modular protocol layer'], [Blocks, 'Multi-chain integration'], [CircleDollarSign, 'Asset-ready economics'], [Check, 'Production deployable']].map(([Icon, text]) => <BorderGlow className="trust-item" key={text} borderRadius={18} glowRadius={22} edgeSensitivity={38} glowIntensity={0.72} fillOpacity={0.16}><Icon size={24} />{text}</BorderGlow>)}</section>; }
-function Roadmap() { return <section className="section" id="roadmap"><div className="section-heading"><span className="section-kicker">Roadmap</span><h2>清晰的发布节奏，让市场知道你在持续进化。</h2></div><div className="roadmap">{roadmap.map(([quarter, title, text]) => <BorderGlow className="roadmap-item" key={quarter} borderRadius={22} glowRadius={32} glowIntensity={1.0} colors={['#9cff4f', '#28ffc8', '#ff4fd8']} fillOpacity={0.24}><span>{quarter}</span><h3>{title}</h3><p>{text}</p></BorderGlow>)}</div></section>; }
-function FAQ() { const [active, setActive] = useState(0); return <section className="faq-section" id="faq"><div className="section-heading left"><span className="section-kicker">FAQ</span><h2>上线前常见问题</h2></div><div className="faq-list">{faqs.map(([q, a], index) => <BorderGlow className="faq-glow" key={q} borderRadius={18} glowRadius={24} edgeSensitivity={34} glowIntensity={0.86} colors={['#9cff4f', '#7c3cff', '#28ffc8']} fillOpacity={0.16}><button className="faq-item" onClick={() => setActive(active === index ? -1 : index)}><span><strong>{q}</strong>{active === index && <em>{a}</em>}</span><ChevronDown className={active === index ? 'rotated' : ''} size={20} /></button></BorderGlow>)}</div></section>; }
-function CTA() { return <BorderGlow id="contact" className="cta-glow" borderRadius={32} glowRadius={42} glowIntensity={1.2} coneSpread={30} animated colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.3}><section className="cta"><div><span className="section-kicker">Ready for mainnet</span><h2>把你的 Web3 官网变成生态增长入口。</h2><p>下一步可以替换品牌、接入真实产品数据、配置上线域名，并部署到生产环境。</p></div><a className="primary-button" href="mailto:hello@nova3.network">Request access <ArrowRight size={18} /></a></section></BorderGlow>; }
-const loopLogos = ['Identity Graph', 'Quest Engine', 'Token Launch', 'Agent Mesh', 'DAO CRM', 'DeFi Rails', 'NFT Access', 'CEX Growth'].map((item) => ({ title: item, node: <span className="loop-logo">{item}</span> }));
-function BottomLoop() { return <section className="bottom-loop"><div className="section-heading"><span className="section-kicker">Network Modules</span><h2>生态模块持续接入，增长数据不断流动。</h2></div><LogoLoop logos={loopLogos} speed={86} logoHeight={44} gap={18} hoverSpeed={18} fadeOut fadeOutColor="#050608" scaleOnHover ariaLabel="NOVA3 ecosystem modules" /></section>; }
-function App() { return <><Header /><main><Hero /><MarketSection /><Products /><WhyChoose /><Ecosystem /><TrustBand /><Roadmap /><FAQ /><CTA /><BottomLoop /></main><footer><span>NOVA3</span><span>Web3 Growth & Asset Network</span></footer></>; }
-createRoot(document.getElementById('root')).render(<App />);
+
+function HeroVisual() {
+  return (
+    <div className="hero-visual" aria-label="链上行情榜单">
+      <BorderGlow
+        className="market-board hero-terminal-card"
+        edgeSensitivity={24}
+        glowColor="164 100 64"
+        backgroundColor="#0b0f10"
+        borderRadius={22}
+        glowRadius={34}
+        glowIntensity={1.1}
+        coneSpread={28}
+        animated
+        colors={['#9cff4f', '#28ffc8', '#7c3cff']}
+        fillOpacity={0.34}
+      >
+        <div className="market-panels">
+          <div className="market-table market-table-wide">
+            <div className="market-tabs">
+              <strong>热门合约榜</strong>
+              <span>热门榜</span>
+            </div>
+            <div className="market-head">
+              <span>币种</span>
+              <span>价格</span>
+              <span>24H涨跌幅</span>
+              <span>24H 成交量</span>
+              <span>操作</span>
+            </div>
+            <div className="market-scroll">
+              {[...futuresRows, ...futuresRows].map(([ticker, pair, price, change, volume, icon], index) => (
+                <div className="market-line" key={`${pair}-${index}`}>
+                  <span className={`coin-badge coin-${icon}`}>{ticker.slice(0, 1)}</span>
+                  <strong>{pair}</strong>
+                  <span>{price}</span>
+                  <em className={change.startsWith('+') ? 'positive' : 'negative'}>{change}</em>
+                  <span>{volume}</span>
+                  <button>交易</button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="market-table">
+            <div className="market-tabs">
+              <strong>新币榜</strong>
+              <span>涨幅榜</span>
+              <span>跌幅榜</span>
+            </div>
+            <div className="market-head compact">
+              <span>币种</span>
+              <span>价格</span>
+              <span>24H涨跌幅</span>
+            </div>
+            <div className="market-scroll">
+              {[...newCoinRows, ...newCoinRows].map(([ticker, pair, price, change, leverage, icon], index) => (
+                <div className="market-line compact" key={`${pair}-${index}`}>
+                  <span className={`coin-badge coin-${icon}`}>{ticker.slice(0, 1)}</span>
+                  <strong>{pair}</strong>
+                  {leverage && <small>{leverage}</small>}
+                  <span>{price}</span>
+                  <em className={change.startsWith('+') ? 'positive' : 'negative'}>{change}</em>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </BorderGlow>
+    </div>
+  );
+}
+
+function HeroBackground() {
+  return (
+    <div className="hero-spline line-waves-hero" aria-hidden="true">
+      <LineWaves
+        speed={0.22}
+        innerLineCount={30}
+        outerLineCount={38}
+        warpIntensity={0.82}
+        rotation={-42}
+        edgeFadeWidth={0.02}
+        colorCycleSpeed={0.64}
+        brightness={0.22}
+        color1="#0aff63"
+        color2="#28ffc8"
+        color3="#82ffec"
+        enableMouseInteraction
+        mouseInfluence={1.25}
+      />
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="hero" id="top">
+      <HeroBackground />
+      <div className="hero-copy">
+        <div className="eyebrow">
+          <Sparkles size={16} />
+          Web3 Growth & Asset Network
+        </div>
+        <TextType
+          as="h1"
+          className="hero-title"
+          text="BUILD WEB3 GROWTH, ASSET LAUNCHES, AND COMMUNITY INCENTIVES IN ONE NETWORK."
+          typingSpeed={24}
+          initialDelay={280}
+          pauseDuration={2800}
+          deletingSpeed={18}
+          loop={false}
+          showCursor
+          cursorCharacter="|"
+          highlightWord="NETWORK"
+          highlightClassName="laser-word"
+        />
+        <p>
+          NOVA3 为 Web3 团队提供身份图谱、任务增长、资产发行与 AI Agent 自动化层。
+          黑盒运营变成可验证的数据流，社区贡献变成可组合的链上资产。
+        </p>
+        <div className="hero-actions">
+          <BorderGlow className="button-glow primary-action-glow" borderRadius={999} glowRadius={26} glowIntensity={1.25} coneSpread={32} colors={['#9cff4f', '#28ffc8', '#56d7ff']} fillOpacity={0.22}>
+            <a className="primary-button" href="#contact">
+              Start building
+              <Rocket size={18} />
+            </a>
+          </BorderGlow>
+          <BorderGlow className="button-glow secondary-action-glow" borderRadius={999} glowRadius={24} glowColor="262 100 72" coneSpread={32} colors={['#7c3cff', '#28ffc8', '#ff4fd8']} fillOpacity={0.2}>
+            <a className="secondary-button" href="#network">
+              Explore network
+              <ArrowRight size={18} />
+            </a>
+          </BorderGlow>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MarketSection() {
+  return (
+    <section className="market-section" id="network">
+      <HeroVisual />
+      <Metrics className="market-metrics" />
+    </section>
+  );
+}
+
+function Metrics({ className = '', id }) {
+  return (
+    <section className={`metrics-strip ${className}`} id={id} aria-label="关键数据">
+      {metrics.map(([value, label]) => (
+        <BorderGlow className="metric" key={label} borderRadius={22} glowRadius={24} edgeSensitivity={34} glowIntensity={0.8} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.18}>
+          <strong>{value}</strong>
+          <span>{label}</span>
+        </BorderGlow>
+      ))}
+    </section>
+  );
+}
+
+function Products() {
+  return (
+    <section className="section" id="products">
+      <div className="section-heading">
+        <span className="section-kicker">Products</span>
+        <h2>一个面向增长、资产和自动化的 Web3 控制台。</h2>
+        <p>参考交易平台的高信任信息密度，也保留未来感官网需要的情绪张力。</p>
+      </div>
+      <div className="product-grid">
+        {products.map((item, index) => (
+          <BorderGlow className="feature-card" key={item.title} borderRadius={22} glowRadius={34} glowIntensity={1.05} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.32}>
+            <ProductIcon variant={index} />
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </BorderGlow>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProductIcon({ variant }) {
+  const labels = [
+    { main: '%', note: 'TASK', className: 'growth' },
+    { main: '$', note: '125', className: 'asset' },
+    { main: '↗', note: 'AI', className: 'agent' }
+  ];
+  const item = labels[variant] ?? labels[0];
+  return (
+    <div className={`product-visual product-visual-${item.className}`} aria-hidden="true">
+      <div className="visual-orb visual-orb-main">{item.main}</div>
+      <div className="visual-orb visual-orb-note">{item.note}</div>
+    </div>
+  );
+}
+
+function WhyIcon({ variant }) {
+  return (
+    <div className={`why-icon why-icon-${variant}`} aria-hidden="true">
+      <span className="why-pop why-pop-back" />
+      <span className="why-doc">
+        <span />
+        <span />
+      </span>
+      <span className="why-symbol" />
+      <span className="why-glow" />
+    </div>
+  );
+}
+
+function WhyChoose() {
+  return (
+    <section className="why-section">
+      <div className="section-heading left">
+        <span className="section-kicker">Why NOVA3</span>
+        <h2>为什么选择我们</h2>
+      </div>
+      <div className="why-grid">
+        {whyCards.map((item) => (
+          <BorderGlow className="why-card" key={item.title} borderRadius={22} glowRadius={30} glowIntensity={0.95} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.18}>
+            <WhyIcon variant={item.variant} />
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </BorderGlow>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Ecosystem() {
+  return (
+    <section className="ecosystem" id="ecosystem">
+      <div className="section-heading left">
+        <span className="section-kicker">Ecosystem</span>
+        <h2>从第一次连接钱包，到长期留存，每一步都能被证明。</h2>
+      </div>
+      <div className="ecosystem-layout">
+        <div className="stack-list">
+          {[
+            [ShieldCheck, 'Proof-of-Action', '验证任务完成、交易行为、社交扩散和开发者贡献。'],
+            [DatabaseZap, 'Unified Data Layer', '聚合链上事件、CRM 标签、积分和活动数据。'],
+            [LockKeyhole, 'Compliance Ready', '预留风控、权限、审计和黑名单策略。'],
+            [Globe2, 'Community Portal', '将社区、活动、空投和生态任务统一到品牌入口。']
+          ].map(([Icon, title, text]) => (
+            <BorderGlow className="stack-item" key={title} borderRadius={18} glowRadius={28} edgeSensitivity={32} glowIntensity={0.92} colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.22}>
+              <Icon size={22} />
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </BorderGlow>
+          ))}
+        </div>
+        <div className="protocol-showcase atom-showcase" aria-label="NOVA3 生态能量核心">
+          <img className="atom-core-image" src="/web3.0/atom-core.png" alt="" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Roadmap() {
+  return (
+    <section className="section" id="roadmap">
+      <div className="section-heading">
+        <span className="section-kicker">Roadmap</span>
+        <h2>清晰的发布节奏，让市场知道你在持续进化。</h2>
+      </div>
+      <div className="roadmap">
+        {roadmap.map(([quarter, title, text]) => (
+          <BorderGlow className="roadmap-item" key={quarter} borderRadius={22} glowRadius={32} glowIntensity={1.0} colors={['#9cff4f', '#28ffc8', '#ff4fd8']} fillOpacity={0.24}>
+            <span>{quarter}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </BorderGlow>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TrustBand() {
+  return (
+    <section className="trust-band">
+      <BorderGlow className="trust-item" borderRadius={18} glowRadius={22} edgeSensitivity={38} glowIntensity={0.72} fillOpacity={0.16}>
+        <Layers3 size={24} />
+        Modular protocol layer
+      </BorderGlow>
+      <BorderGlow className="trust-item" borderRadius={18} glowRadius={22} edgeSensitivity={38} glowIntensity={0.72} fillOpacity={0.16}>
+        <Blocks size={24} />
+        Multi-chain integration
+      </BorderGlow>
+      <BorderGlow className="trust-item" borderRadius={18} glowRadius={22} edgeSensitivity={38} glowIntensity={0.72} fillOpacity={0.16}>
+        <CircleDollarSign size={24} />
+        Asset-ready economics
+      </BorderGlow>
+      <BorderGlow className="trust-item" borderRadius={18} glowRadius={22} edgeSensitivity={38} glowIntensity={0.72} fillOpacity={0.16}>
+        <Check size={24} />
+        Production deployable
+      </BorderGlow>
+    </section>
+  );
+}
+
+function FAQ() {
+  const [active, setActive] = useState(0);
+  return (
+    <section className="faq-section" id="faq">
+      <div className="section-heading left">
+        <span className="section-kicker">FAQ</span>
+        <h2>上线前常见问题</h2>
+      </div>
+      <div className="faq-list">
+        {faqs.map(([q, a], index) => (
+          <BorderGlow className="faq-glow" key={q} borderRadius={18} glowRadius={24} edgeSensitivity={34} glowIntensity={0.86} colors={['#9cff4f', '#7c3cff', '#28ffc8']} fillOpacity={0.16}>
+            <button className="faq-item" onClick={() => setActive(active === index ? -1 : index)}>
+              <span>
+                <strong>{q}</strong>
+                {active === index && <em>{a}</em>}
+              </span>
+              <ChevronDown className={active === index ? 'rotated' : ''} size={20} />
+            </button>
+          </BorderGlow>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CTA() {
+  return (
+    <BorderGlow id="contact" className="cta-glow" borderRadius={32} glowRadius={42} glowIntensity={1.2} coneSpread={30} animated colors={['#9cff4f', '#28ffc8', '#7c3cff']} fillOpacity={0.3}>
+      <section className="cta">
+        <div>
+          <span className="section-kicker">Ready for mainnet</span>
+          <h2>把你的 Web3 官网变成生态增长入口。</h2>
+          <p>下一步可以替换品牌、接入真实产品数据、配置上线域名，并部署到生产环境。</p>
+        </div>
+        <a className="primary-button" href="mailto:hello@nova3.network">
+          Request access
+          <ArrowRight size={18} />
+        </a>
+      </section>
+    </BorderGlow>
+  );
+}
+
+const loopLogos = [
+  'Identity Graph',
+  'Quest Engine',
+  'Token Launch',
+  'Agent Mesh',
+  'DAO CRM',
+  'DeFi Rails',
+  'NFT Access',
+  'CEX Growth'
+].map((item) => ({
+  title: item,
+  node: <span className="loop-logo">{item}</span>
+}));
+
+function BottomLoop() {
+  return (
+    <section className="bottom-loop">
+      <div className="section-heading">
+        <span className="section-kicker">Network Modules</span>
+        <h2>生态模块持续接入，增长数据不断流动。</h2>
+      </div>
+      <LogoLoop logos={loopLogos} speed={86} logoHeight={44} gap={18} hoverSpeed={18} fadeOut fadeOutColor="#050608" scaleOnHover ariaLabel="NOVA3 ecosystem modules" />
+    </section>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <Header />
+      <main>
+        <Hero />
+        <MarketSection />
+        <Products />
+        <WhyChoose />
+        <Ecosystem />
+        <TrustBand />
+        <Roadmap />
+        <FAQ />
+        <CTA />
+        <BottomLoop />
+      </main>
+      <footer>
+        <span>NOVA3</span>
+        <span>Web3 Growth & Asset Network</span>
+      </footer>
+    </>
+  );
+}
+
+const rootElement = document.getElementById('root');
+const root = window.__nova3Root ?? createRoot(rootElement);
+window.__nova3Root = root;
+root.render(<App />);

@@ -1,0 +1,16 @@
+.text-type {
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.text-type__cursor {
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: var(--lime);
+  opacity: 1;
+  text-shadow: 0 0 18px rgba(156, 255, 79, 0.75);
+}
+
+.text-type__cursor--hidden {
+  display: none;
+}
